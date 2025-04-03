@@ -1,11 +1,14 @@
 import './App.css'
 import '../ThemePanel/ThemePanel'
 import ThemePanel from '../ThemePanel/ThemePanel'
+import { useSelector } from 'react-redux'
 
 function App() {
 
+    const theme = useSelector(state => state.appSettings.theme)
+
   return (
-    <div className="body">
+    <div className={`body body_theme_${theme}`}>
         <div className="task-manager">
             <ThemePanel/>
             <h1 className = 'task-manager__title'>Just do it.<div className="task-manager__line"></div></h1>

@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterSlice from './counterSlice'
+import tasksSlice from './tasksSlice'
+import appSettingsSlice from './appSettingsSlice'
 
 export default configureStore({
   reducer: {
-    counter: counterSlice,
+    tasks: tasksSlice,
+    appSettings: appSettingsSlice
   },
 })
