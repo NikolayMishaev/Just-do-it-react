@@ -1,0 +1,12 @@
+export function getDate (date) {
+    if (!date) date = new Date()
+    const dateInSeconds = date.getTime()
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const seconds = date.getSeconds()
+    const formatedDate = `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
+    return {currentDate: formatedDate, dateInSeconds }
+}

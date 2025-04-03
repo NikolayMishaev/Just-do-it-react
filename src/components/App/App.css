@@ -105,41 +105,16 @@
     min-height: 420px;
 }
 
-.task-manager__task {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(37, 46, 53);
-    border-radius: 30px;
-    padding: 5px 0px 5px 15px;
-    margin-bottom: 15px;
-    font-size: 18px;
-}
-
-.task-manager__task-text{
-    margin: 0;
-    overflow: hidden;
-    max-width: 200px;
-    max-height: 23px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.task-manager__task_complete {
-    text-decoration: line-through;
-    color: rgb(111, 111, 113)
-}
 
 .task-manager__button_task_complete{
     margin-left: auto;
     margin-right: 11px;
-    background: no-repeat center/cover url(images/pic_success.jpg);
+    background: no-repeat center/cover url(../../images/pic_success.jpg);
 }
 
 .task-manager__button_task_delete {
     margin-right: 15px;
-    background: no-repeat center/cover url(images/pic_delete.jpg);
+    background: no-repeat center/cover url(../../images/pic_delete.jpg);
 }
 
 .task-manager__pagination-panel {
@@ -212,12 +187,12 @@
 .body_theme_white .task-manager__button_task_complete{
     margin-left: auto;
     margin-right: 11px;
-    background: no-repeat center/cover url(images/pic_success_white.png);
+    background: no-repeat center/cover url(../../images/pic_success_white.png);
 }
 
 .body_theme_white .task-manager__button_task_delete {
     margin-right: 15px;
-    background: no-repeat center/cover url(images/pic_delete_white.png);
+    background: no-repeat center/cover url(../../images/pic_delete_white.png);
 }
 
 .body_theme_white .task-manager__button_pagination_prev {
@@ -275,12 +250,12 @@
 .body_theme_black .task-manager__button_task_complete{
     margin-left: auto;
     margin-right: 11px;
-    background: no-repeat center/cover url(images/pic_success_black.png);
+    background: no-repeat center/cover url(../../images/pic_success_black.png);
 }
 
 .body_theme_black .task-manager__button_task_delete {
     margin-right: 15px;
-    background: no-repeat center/cover url(images/pic_delete_black.png);
+    background: no-repeat center/cover url(../../images/pic_delete_black.png);
 }
 
 .body_theme_black .task-manager__button_pagination_prev {
