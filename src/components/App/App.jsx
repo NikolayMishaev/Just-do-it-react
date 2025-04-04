@@ -7,10 +7,11 @@ import { addTask } from '../../store/tasksSlice'
 import { incrementId } from '../../store/appSettingsSlice'
 import { getDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
     const [inputValue, setInputValue] = useState("");
+    const [serverUrl, setServerUrl] = useState('http://localhost:3000/tasks');
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
@@ -30,6 +31,18 @@ function App() {
     const listTasks = tasks.map(task =>
         <Task key={task.id} {...task}/>
     );
+
+    const getData = async (url) => {
+        let response = await fetch(url)
+        let json = await response.json()
+        console.log(json)
+    }
+
+    useEffect(() => {
+        getData(serverUrl)
+      }, []);
+
+
 
   return (
     <div className={`body body_theme_${theme}`}>
