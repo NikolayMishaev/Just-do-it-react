@@ -4,12 +4,12 @@ import ThemePanel from '../ThemePanel/ThemePanel'
 import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTaskStore } from '../../store/tasksSlice'
-import { setPage, setCountPage, incrementId, setId, changeTheme } from '../../store/appSettingsSlice'
+import { setPageStore, setCountPageStore, incrementIdStore, setIdStore, changeThemeStore } from '../../store/appSettingsSlice'
 import { getDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
-import { getTasks, postTask } from '../../utils/TasksAPI'
-import { getAppSettings, updateAppSettings } from '../../utils/AppSettingsAPI'
+import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
+import { getAppSettingsServer, updateAppSettingsServer } from '../../utils/AppSettingsAPI'
 
 function App() {
     const [inputValue, setInputValue] = useState("");
@@ -32,10 +32,10 @@ function App() {
             isComplete: false,
             id: String(id),
         };
-        updateAppSettings({ appID: id + 1 }).then(response => {
+        updateAppSettingsServer({ appID: id + 1 }).then(response => {
             if (response) {
-                dispatch(incrementId())
-                postTask(newTask)
+                dispatch(incrementIdStore())
+                addTaskServer(newTask)
                 .then((task) => {
                     if (task) {
                         dispatch(addTaskStore(task))
@@ -50,16 +50,16 @@ function App() {
     );
 
     useEffect(() => {
-        getAppSettings().then(appSettings => {
+        getAppSettingsServer().then(appSettings => {
             if (appSettings) {
                 const {theme, page, countTasksOnPage, appID} = appSettings[0]
-                dispatch(changeTheme(theme))
-                dispatch(setId(appID))
-                dispatch(setPage(page))
-                dispatch(setCountPage(countTasksOnPage))
+                dispatch(changeThemeStore(theme))
+                dispatch(setIdStore(appID))
+                dispatch(setPageStore(page))
+                dispatch(setCountPageStore(countTasksOnPage))
             }
         }).catch(error => console.log(error))
-        getTasks().then(tasks => {
+        getTasksServer().then(tasks => {
             if (Array.isArray(tasks)) tasks.map(task => dispatch(addTaskStore(task)))
         }).catch(error => console.log(error))
       }, []);

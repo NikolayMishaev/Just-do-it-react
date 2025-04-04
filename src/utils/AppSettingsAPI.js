@@ -7,7 +7,7 @@ const checkStatus = (res) => {
   return Promise.reject(`Error ${res.status} ${res.statusText}`);
 };
 
-export const getAppSettings = async () => {
+export const getAppSettingsServer = async () => {
   try {
     const response = await fetch(`${API.baseURL}/settings`, {
       method: "GET",
@@ -19,7 +19,7 @@ export const getAppSettings = async () => {
   }
 };
 
-export const updateAppSettings = async (field) => {
+export const updateAppSettingsServer = async (field) => {
   try {
     const response = await fetch(`${API.baseURL}/settings/123`, {
       method: "PATCH",

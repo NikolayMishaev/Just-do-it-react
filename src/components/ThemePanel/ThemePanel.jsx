@@ -1,5 +1,5 @@
 import './ThemePanel.css'
-import { changeTheme } from '../../store/appSettingsSlice'
+import { changeThemeStore } from '../../store/appSettingsSlice'
 import { useDispatch } from 'react-redux'
 
 function ThemePanel() {
@@ -7,7 +7,7 @@ function ThemePanel() {
     const dispatch = useDispatch()
 
     function handleChangeTheme (theme) {
-        dispatch(changeTheme(theme))
+        dispatch(changeThemeStore(theme))
     }
     
     return (

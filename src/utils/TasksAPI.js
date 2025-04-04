@@ -7,7 +7,7 @@ const checkStatus = (res) => {
   return Promise.reject(`Error ${res.status} ${res.statusText}`);
 };
 
-export const getTasks = async () => {
+export const getTasksServer = async () => {
   try {
     const response = await fetch(`${API.baseURL}/tasks`, {
       method: "GET",
@@ -19,7 +19,7 @@ export const getTasks = async () => {
   }
 };
 
-export const postTask = async (task) => {
+export const addTaskServer = async (task) => {
   try {
     const response = await fetch(`${API.baseURL}/tasks`, {
       method: "POST",
@@ -32,7 +32,7 @@ export const postTask = async (task) => {
   }
 };
 
-export const deleteTask = async (taskID) => {
+export const deleteTaskServer = async (taskID) => {
     try {
       const response = await fetch(`${API.baseURL}/tasks/${taskID}`, {
         method: "DELETE",

@@ -1,5 +1,5 @@
 import './Task.css'
-import { deleteTask } from '../../utils/TasksAPI'
+import { deleteTaskServer } from '../../utils/TasksAPI'
 import { useDispatch } from 'react-redux'
 import { deleteTaskStore } from '../../store/tasksSlice'
 
@@ -8,15 +8,15 @@ function Task({text, isComplete, id}) {
     const dispatch = useDispatch()
 
     function handleCompleteTask() {
-        
+
     }
 
     function handleDeleteTask() {
-        deleteTask(id).then (response => {
+        deleteTaskServer(id).then (response => {
             if (response) {
                 dispatch(deleteTaskStore(response.id))
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     return (

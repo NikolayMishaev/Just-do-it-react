@@ -9,30 +9,30 @@ export const appSettingsSlice = createSlice({
     id: 1,
   },
   reducers: {
-    incrementPage: (state) => { 
+    incrementPageStore: (state) => { 
       state.page += 1 
     },
-    decrementPage: (state) => { 
+    decrementPageStore: (state) => { 
       state.page -= 1 
     },
-    setPage: (state, action) => { 
+    setPageStore: (state, action) => { 
       state.page = action.payload
     },
-    incrementId: (state) => { 
+    incrementIdStore: (state) => { 
       state.id += 1 
     },
-    setId: (state, action) => { 
+    setIdStore: (state, action) => { 
       state.id = action.payload
     },
-    changeTheme: (state, action) => { 
+    changeThemeStore: (state, action) => { 
       state.theme = action.payload
     },
-    setCountPage: (state, action) => { 
+    setCountPageStore: (state, action) => { 
       state.countTasksOnPage = action.payload
     }
   },
 })
 
-export const { incrementPage, decrementPage, setPage, setCountPage, incrementId, changeTheme, setId } = appSettingsSlice.actions
+export const { incrementPageStore, decrementPageStore, setPageStore, setCountPageStore, incrementIdStore, changeThemeStore, setIdStore } = appSettingsSlice.actions
 
 export default appSettingsSlice.reducer
