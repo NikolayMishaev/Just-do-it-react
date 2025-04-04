@@ -19,7 +19,7 @@ export const getAppSettings = async () => {
   }
 };
 
-export const patchAppSettings = async (field) => {
+export const updateAppSettings = async (field) => {
   try {
     const response = await fetch(`${API.baseURL}/settings/123`, {
       method: "PATCH",

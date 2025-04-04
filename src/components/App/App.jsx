@@ -3,13 +3,13 @@ import '../ThemePanel/ThemePanel'
 import ThemePanel from '../ThemePanel/ThemePanel'
 import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
-import { addTask } from '../../store/tasksSlice'
+import { addTaskStore } from '../../store/tasksSlice'
 import { setPage, setCountPage, incrementId, setId, changeTheme } from '../../store/appSettingsSlice'
 import { getDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasks, postTask } from '../../utils/TasksAPI'
-import { getAppSettings, patchAppSettings } from '../../utils/AppSettingsAPI'
+import { getAppSettings, updateAppSettings } from '../../utils/AppSettingsAPI'
 
 function App() {
     const [inputValue, setInputValue] = useState("");
@@ -18,32 +18,31 @@ function App() {
     const id = useSelector(state => state.appSettings.id)
     const tasks = useSelector(state => state.tasks.tasks)
 
-    function handleChangeTask (e) {
+    function handleInputTask (e) {
         setInputValue(e.target.value)
     }
  
     function handleAddTask() {
-        if (!inputValue) return;
+        if (!inputValue) return
         const { currentDate, dateInSeconds } = getDate();
         const newTask = {
             text: inputValue,
             date: currentDate,
             dateInSeconds,
             isComplete: false,
-            id: id,
+            id: String(id),
         };
-
-        postTask(newTask)
-            .then((task) => {
-                if (task) {
-                    dispatch(addTask(newTask))
-                }
-            })
-            .catch((error) => console.log(error))
-
-        patchAppSettings({appID : id + 1}).then(res => {
-            if (res) dispatch(incrementId());
-        }).catch((error) => console.log(error));
+        updateAppSettings({ appID: id + 1 }).then(response => {
+            if (response) {
+                dispatch(incrementId())
+                postTask(newTask)
+                .then((task) => {
+                    if (task) {
+                        dispatch(addTaskStore(task))
+                    }
+                })
+            }
+        }).catch((error) => console.log(error))
     }
 
     const viewTasks = tasks.map(task =>
@@ -61,7 +60,7 @@ function App() {
             }
         }).catch(error => console.log(error))
         getTasks().then(tasks => {
-            if (Array.isArray(tasks)) tasks.map(task => dispatch(addTask(task)))
+            if (Array.isArray(tasks)) tasks.map(task => dispatch(addTaskStore(task)))
         }).catch(error => console.log(error))
       }, []);
 
@@ -73,7 +72,7 @@ function App() {
             <ThemePanel/>
             <h1 className = 'task-manager__title'>Just do it.<div className="task-manager__line"></div></h1>
             <div className="task-manager__input-panel">
-                <input className="task-manager__input" placeholder="Add a task." value={inputValue} onChange={handleChangeTask}></input>
+                <input className="task-manager__input" placeholder="Add a task." value={inputValue} onChange={handleInputTask}></input>
                 <button className="task-manager__button task-manager__button_task_add" onClick={handleAddTask}>I Got This!</button>
             </div>
             <p className="task-manager__date">{MESSAGES.emptyContainerTasks}</p>

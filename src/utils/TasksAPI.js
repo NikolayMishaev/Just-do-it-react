@@ -31,3 +31,15 @@ export const postTask = async (task) => {
     return Promise.reject(err);
   }
 };
+
+export const deleteTask = async (taskID) => {
+    try {
+      const response = await fetch(`${API.baseURL}/tasks/${taskID}`, {
+        method: "DELETE",
+        headers: API.headers,
+      });
+      return checkStatus(response);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  };

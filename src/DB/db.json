@@ -4,24 +4,9 @@
       "theme": "grey",
       "page": 0,
       "countTasksOnPage": 10,
-      "appID": 3,
+      "appID": 10,
       "id": "123"
     }
   ],
-  "tasks": [
-    {
-      "id": 1,
-      "text": "sdfsdf",
-      "date": "4/4/2025, 18:25:32 PM",
-      "dateInSeconds": 1743780332439,
-      "isComplete": false
-    },
-    {
-      "id": 2,
-      "text": "sdfsdfsdfsdf",
-      "date": "4/4/2025, 18:25:50 PM",
-      "dateInSeconds": 1743780350055,
-      "isComplete": false
-    }
-  ]
+  "tasks": []
 }
