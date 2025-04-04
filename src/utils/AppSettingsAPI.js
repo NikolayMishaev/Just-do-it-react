@@ -7,9 +7,9 @@ const checkStatus = (res) => {
   return Promise.reject(`Error ${res.status} ${res.statusText}`);
 };
 
-export const getTasks = async () => {
+export const getAppSettings = async () => {
   try {
-    const response = await fetch(`${API.baseURL}/tasks`, {
+    const response = await fetch(`${API.baseURL}/settings`, {
       method: "GET",
       headers: API.headers,
     });
@@ -19,12 +19,12 @@ export const getTasks = async () => {
   }
 };
 
-export const postTask = async (task) => {
+export const patchAppSettings = async (field) => {
   try {
-    const response = await fetch(`${API.baseURL}/tasks`, {
-      method: "POST",
+    const response = await fetch(`${API.baseURL}/settings/123`, {
+      method: "PATCH",
       headers: API.headers,
-      body: JSON.stringify(task),
+      body: JSON.stringify(field),
     });
     return checkStatus(response);
   } catch (err) {

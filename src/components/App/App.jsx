@@ -4,11 +4,12 @@ import ThemePanel from '../ThemePanel/ThemePanel'
 import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTask } from '../../store/tasksSlice'
-import { incrementId } from '../../store/appSettingsSlice'
+import { setPage, setCountPage, incrementId, setId, changeTheme } from '../../store/appSettingsSlice'
 import { getDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasks, postTask } from '../../utils/TasksAPI'
+import { getAppSettings, patchAppSettings } from '../../utils/AppSettingsAPI'
 
 function App() {
     const [inputValue, setInputValue] = useState("");
@@ -21,26 +22,47 @@ function App() {
         setInputValue(e.target.value)
     }
  
-    function handleAddTask () {
-        if (!inputValue) return
-        const {currentDate, dateInSeconds} = getDate()
+    function handleAddTask() {
+        if (!inputValue) return;
+        const { currentDate, dateInSeconds } = getDate();
+        const newTask = {
+            text: inputValue,
+            date: currentDate,
+            dateInSeconds,
+            isComplete: false,
+            id: id,
+        };
 
-        dispatch(addTask({text: inputValue, date: currentDate, dateInSeconds, isComplete: false, id: id}))
-        dispatch(incrementId())
+        postTask(newTask)
+            .then((task) => {
+                if (task) {
+                    dispatch(addTask(newTask))
+                }
+            })
+            .catch((error) => console.log(error))
+
+        patchAppSettings({appID : id + 1}).then(res => {
+            if (res) dispatch(incrementId());
+        }).catch((error) => console.log(error));
     }
 
-    const listTasks = tasks.map(task =>
+    const viewTasks = tasks.map(task =>
         <Task key={task.id} {...task}/>
     );
 
-    const loadTasksFromServer = async () => {
-        const tasks = await getTasks()
-        if (tasks) tasks.map(task => dispatch(addTask(task)))
-    }
-
     useEffect(() => {
-        // loadTasksFromServer()
-        getTasks().then(r=>console.log(r),e=>console.log(e))
+        getAppSettings().then(appSettings => {
+            if (appSettings) {
+                const {theme, page, countTasksOnPage, appID} = appSettings[0]
+                dispatch(changeTheme(theme))
+                dispatch(setId(appID))
+                dispatch(setPage(page))
+                dispatch(setCountPage(countTasksOnPage))
+            }
+        }).catch(error => console.log(error))
+        getTasks().then(tasks => {
+            if (Array.isArray(tasks)) tasks.map(task => dispatch(addTask(task)))
+        }).catch(error => console.log(error))
       }, []);
 
 
@@ -56,7 +78,7 @@ function App() {
             </div>
             <p className="task-manager__date">{MESSAGES.emptyContainerTasks}</p>
             <ul className="task-manager__container-tasks">
-                {listTasks}
+                {viewTasks}
             </ul>
             <div className="task-manager__pagination-panel display-none">
                 <button className="task-manager__button task-manager__button_pagination_prev">prev page</button>
