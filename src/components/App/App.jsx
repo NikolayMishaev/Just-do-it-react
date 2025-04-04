@@ -8,10 +8,10 @@ import { incrementId } from '../../store/appSettingsSlice'
 import { getDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
+import { getTasks, postTask } from '../../utils/TasksAPI'
 
 function App() {
     const [inputValue, setInputValue] = useState("");
-    const [serverUrl, setServerUrl] = useState('http://localhost:3000/tasks');
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
@@ -20,10 +20,11 @@ function App() {
     function handleChangeTask (e) {
         setInputValue(e.target.value)
     }
-
+ 
     function handleAddTask () {
         if (!inputValue) return
         const {currentDate, dateInSeconds} = getDate()
+
         dispatch(addTask({text: inputValue, date: currentDate, dateInSeconds, isComplete: false, id: id}))
         dispatch(incrementId())
     }
@@ -32,14 +33,14 @@ function App() {
         <Task key={task.id} {...task}/>
     );
 
-    const getData = async (url) => {
-        let response = await fetch(url)
-        let json = await response.json()
-        console.log(json)
+    const loadTasksFromServer = async () => {
+        const tasks = await getTasks()
+        if (tasks) tasks.map(task => dispatch(addTask(task)))
     }
 
     useEffect(() => {
-        getData(serverUrl)
+        // loadTasksFromServer()
+        getTasks().then(r=>console.log(r),e=>console.log(e))
       }, []);
 
 
