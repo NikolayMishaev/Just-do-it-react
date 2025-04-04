@@ -42,4 +42,17 @@ export const deleteTaskServer = async (taskID) => {
     } catch (err) {
       return Promise.reject(err);
     }
-  };
+};
+
+export const updateTaskServer = async (taskID, field) => {
+    try {
+      const response = await fetch(`${API.baseURL}/tasks/${taskID}`, {
+        method: "PATCH",
+        headers: API.headers,
+        body: JSON.stringify(field)
+      });
+      return checkStatus(response);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+};

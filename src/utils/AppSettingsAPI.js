@@ -24,7 +24,7 @@ export const updateAppSettingsServer = async (field) => {
     const response = await fetch(`${API.baseURL}/settings/123`, {
       method: "PATCH",
       headers: API.headers,
-      body: JSON.stringify(field),
+      body: JSON.stringify(field)
     });
     return checkStatus(response);
   } catch (err) {
