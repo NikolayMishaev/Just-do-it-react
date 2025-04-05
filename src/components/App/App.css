@@ -4,6 +4,7 @@
     position: relative;
     display: flex;
     justify-content: center;
+    min-width: 405px;
     min-height: 100vh;
     background-image: linear-gradient(to right, rgb(77, 81, 84), rgb(11, 48, 64));
     font-family: 'Moderustic', 'Arial', sans-serif;
@@ -102,7 +103,7 @@
     width: 327px;
     margin: 0 auto;
     padding-right: 15px;
-    min-height: 420px;
+    min-height: 600px;
 }
 
 
@@ -274,4 +275,38 @@
 
 .display-none {
     display: none;
+}
+
+@media (max-width: 900px) {
+    .task-manager {
+        padding-right: 0;
+    }
+
+}
+
+@media (max-width: 700px) {
+    .task-manager__title {
+        font-size: 14vw;
+    }
+    .task-manager__line {
+        height: 17vw;
+    }
+}
+
+@media (max-width: 500px) {
+    .task-manager {
+        width: 100%;
+        padding: 12vh 15px;
+    }
+    .task-manager__title {
+        padding: 0;
+        font-size: 70px;
+        display: flex;
+        justify-content: center;
+    }
+    .task-manager__line {
+        position: relative;
+        right: 7px;
+        height: 85px;
+    }
 }
