@@ -15,10 +15,13 @@ function App() {
 
     const [inputValue, setInputValue] = useState("");
     const [dateLastTask, setDateLastTask] = useState(MESSAGES.taskListIsEmpty);
+    const [visiblePaginationPanel, setVisiblePaginationPanel] = useState(false);
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
     const tasks = useSelector(state => state.tasks.tasks)
+    const page = useSelector(state => state.appSettings.page)
+    const countTasksOnPage = useSelector(state => state.appSettings.countTasksOnPage)
 
     function handleInputTask (e) {
         setInputValue(e.target.value)
@@ -67,8 +70,16 @@ function App() {
       }, []);
 
       useEffect(() => {
+        // отобразить дату последней таски
         if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
         else setDateLastTask(MESSAGES.taskListIsEmpty)
+        // отобразить панель пагинации
+        if (tasks.length < countTasksOnPage) {
+            setVisiblePaginationPanel(false)
+            updateAppSettingsServer({page: 1}).then(response => {
+                if (response) dispatch(setPageStore(response.page))
+            }).catch(error => console.log(error))
+        } else setVisiblePaginationPanel(true)
       }, [tasks])
 
   return (
@@ -84,9 +95,9 @@ function App() {
             <ul className="task-manager__container-tasks">
                 {viewTasks}
             </ul>
-            <div className="task-manager__pagination-panel display-none">
+            <div className={`task-manager__pagination-panel ${visiblePaginationPanel ? '' : 'display-none'}`}>
                 <button className="task-manager__button task-manager__button_pagination_prev">prev page</button>
-                <div className="task-manager__page"></div>
+                <div className="task-manager__page">{page}</div>
                 <button className="task-manager__button task-manager__button_pagination_next">next page</button>
             </div>
         </div>

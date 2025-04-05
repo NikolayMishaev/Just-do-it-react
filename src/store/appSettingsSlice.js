@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 export const appSettingsSlice = createSlice({
   name: 'appSettings',
   initialState: {
-    theme: 'grey',
+    theme: '',
     page: 0,
-    countTasksOnPage: 10,
-    id: 1,
+    countTasksOnPage: 0,
+    id: 0,
   },
   reducers: {
     incrementPageStore: (state) => { 
