@@ -4,8 +4,8 @@ import ThemePanel from '../ThemePanel/ThemePanel'
 import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTaskStore } from '../../store/tasksSlice'
-import { setPageStore, setCountPageStore, incrementIdStore, setIdStore, changeThemeStore } from '../../store/appSettingsSlice'
-import { getDate ,sortByID, getLastDate } from '../../utils/utils'
+import { setPageStore, setIdStore, changeThemeStore, setCountPageStore } from '../../store/appSettingsSlice'
+import { getDate ,sortByID, getLastDate, getMaxCountPage } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
@@ -39,7 +39,7 @@ function App() {
         };
         updateAppSettingsServer({ appID: id + 1 }).then(response => {
             if (response) {
-                dispatch(incrementIdStore())
+                dispatch(setIdStore(response.appID))
                 addTaskServer(newTask)
                 .then((task) => {
                     if (task) {
@@ -50,12 +50,30 @@ function App() {
         }).catch((error) => console.log(error))
     }
 
+    function handlePrevPage () {
+        if (page === 1) return
+        updateAppSettingsServer({ page: page - 1}).then(response => {
+            if (response) {
+                dispatch(setPageStore(response.page))
+            }
+        }).catch((error) => console.log(error))
+    }
+
+    function handleNextPage () {
+        if (page === getMaxCountPage(tasks, countTasksOnPage)) return
+        updateAppSettingsServer({ page: page + 1}).then(response => {
+            if (response) {
+                dispatch(setPageStore(response.page))
+            }
+        }).catch((error) => console.log(error))
+    }
+
     const viewTasks = createSliceTasks(tasks).map(task =>
         <Task key={task.id} {...task}/>
     );
 
     function createSliceTasks(tasks) {
-        if (tasks.length < 10) return sortByID(tasks)
+        if (tasks.length <= countTasksOnPage) return sortByID(tasks)
         else {
             const currentSlice = (page - 1) * countTasksOnPage
             return sortByID(tasks).slice(currentSlice, currentSlice + countTasksOnPage)
@@ -92,8 +110,18 @@ function App() {
                     })
                     .catch(error => console.log(error))
             }
-        } else if (!visiblePaginationPanel) setVisiblePaginationPanel(true)
-    }, [tasks, countTasksOnPage])
+        } else {
+            if (!tasks.length) return
+            if (!visiblePaginationPanel) setVisiblePaginationPanel(true)
+            if (page > getMaxCountPage(tasks, countTasksOnPage)) {
+                updateAppSettingsServer({ page: page - 1 })
+                .then(response => {
+                    if (response) dispatch(setPageStore(response.page))
+                })
+                .catch(error => console.log(error))
+            }
+        }
+    }, [tasks])
 
   return (
     <div className={`body body_theme_${theme}`}>
@@ -109,9 +137,9 @@ function App() {
                 {viewTasks}
             </ul>
             <div className={`task-manager__pagination-panel ${visiblePaginationPanel ? '' : 'display-none'}`}>
-                <button className="task-manager__button task-manager__button_pagination_prev">prev page</button>
+                <button className="task-manager__button task-manager__button_pagination_prev" onClick={handlePrevPage}>prev page</button>
                 <div className="task-manager__page">{page}</div>
-                <button className="task-manager__button task-manager__button_pagination_next">next page</button>
+                <button className="task-manager__button task-manager__button_pagination_next" onClick={handleNextPage}>next page</button>
             </div>
         </div>
     </div>

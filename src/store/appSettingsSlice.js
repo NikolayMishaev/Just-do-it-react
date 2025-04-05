@@ -9,17 +9,8 @@ export const appSettingsSlice = createSlice({
     id: 0,
   },
   reducers: {
-    incrementPageStore: (state) => { 
-      state.page += 1 
-    },
-    decrementPageStore: (state) => { 
-      state.page -= 1 
-    },
     setPageStore: (state, action) => { 
       state.page = action.payload
-    },
-    incrementIdStore: (state) => { 
-      state.id += 1 
     },
     setIdStore: (state, action) => { 
       state.id = action.payload
@@ -33,6 +24,6 @@ export const appSettingsSlice = createSlice({
   },
 })
 
-export const { incrementPageStore, decrementPageStore, setPageStore, setCountPageStore, incrementIdStore, changeThemeStore, setIdStore } = appSettingsSlice.actions
+export const { setPageStore, setIdStore, changeThemeStore, setCountPageStore  } = appSettingsSlice.actions
 
 export default appSettingsSlice.reducer

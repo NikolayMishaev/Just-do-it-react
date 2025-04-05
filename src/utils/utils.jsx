@@ -21,3 +21,7 @@ export function getLastDate (array) {
     const dateLastAddedElement = lastAddedElement.date
     return dateLastAddedElement
 }
+
+export function getMaxCountPage (tasks, countTasksOnPage) {
+    return Math.ceil(tasks.length / countTasksOnPage)
+}
