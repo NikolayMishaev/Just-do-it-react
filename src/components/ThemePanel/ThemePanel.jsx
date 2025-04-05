@@ -1,13 +1,16 @@
 import './ThemePanel.css'
 import { changeThemeStore } from '../../store/appSettingsSlice'
 import { useDispatch } from 'react-redux'
+import { updateAppSettingsServer } from '../../utils/AppSettingsAPI'
 
 function ThemePanel() {
 
     const dispatch = useDispatch()
 
     function handleChangeTheme (theme) {
-        dispatch(changeThemeStore(theme))
+        updateAppSettingsServer({theme}).then(response => {
+            if (response) dispatch(changeThemeStore(response.theme))
+        })
     }
     
     return (
