@@ -16,7 +16,6 @@ function App() {
     const [inputValue, setInputValue] = useState("");
     const [dateLastTask, setDateLastTask] = useState(MESSAGES.taskListIsEmpty);
     const [visiblePaginationPanel, setVisiblePaginationPanel] = useState(false);
-    const [sliceTasks, setSliceTasks] = useState([]);
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
@@ -66,7 +65,7 @@ function App() {
     useEffect(() => {
         getAppSettingsServer().then(appSettings => {
             if (appSettings) {
-                const {theme, page, countTasksOnPage, appID} = appSettings[0]
+                const { theme, page, countTasksOnPage, appID } = appSettings[0]
                 dispatch(changeThemeStore(theme))
                 dispatch(setIdStore(appID))
                 dispatch(setPageStore(page))
@@ -76,24 +75,25 @@ function App() {
         getTasksServer().then(tasks => {
             if (Array.isArray(tasks)) tasks.map(task => dispatch(addTaskStore(task)))
         }).catch(error => console.log(error))
-      }, []);
+    }, []);
 
-      useEffect(() => {
+    useEffect(() => {
         // отобразить дату последней таски
         if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
         else setDateLastTask(MESSAGES.taskListIsEmpty)
+
         // отобразить/скрыть панель пагинации
         if (tasks.length < countTasksOnPage) {
-            setVisiblePaginationPanel(false)
-            // setSliceTasks([])
-            updateAppSettingsServer({page: 1}).then(response => {
-                if (response) dispatch(setPageStore(response.page))
-            }).catch(error => console.log(error))
-        } else {
-            setVisiblePaginationPanel(true)
-            // createSliceTasks()
-        }
-      }, [tasks, countTasksOnPage])
+            if (visiblePaginationPanel) setVisiblePaginationPanel(false)
+            if (page !== 1) {
+                updateAppSettingsServer({ page: 1 })
+                    .then(response => {
+                        if (response) dispatch(setPageStore(response.page))
+                    })
+                    .catch(error => console.log(error))
+            }
+        } else if (!visiblePaginationPanel) setVisiblePaginationPanel(true)
+    }, [tasks, countTasksOnPage])
 
   return (
     <div className={`body body_theme_${theme}`}>
