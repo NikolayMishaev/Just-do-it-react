@@ -25,3 +25,8 @@ export function getLastDate (array) {
 export function getMaxCountPage (tasks, countTasksOnPage) {
     return Math.ceil(tasks.length / countTasksOnPage)
 }
+
+export function formatPage (page, countTasks, maxCountPage) {
+    if (countTasks < maxCountPage) return page
+    else return `${page}/${maxCountPage}`
+}

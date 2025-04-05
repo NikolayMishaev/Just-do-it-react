@@ -5,7 +5,7 @@ import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTaskStore } from '../../store/tasksSlice'
 import { setPageStore, setIdStore, changeThemeStore, setCountPageStore } from '../../store/appSettingsSlice'
-import { getDate ,sortByID, getLastDate, getMaxCountPage } from '../../utils/utils'
+import { getDate ,sortByID, getLastDate, getMaxCountPage, formatPage } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
@@ -99,9 +99,10 @@ function App() {
         // отобразить дату последней таски
         if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
         else setDateLastTask(MESSAGES.taskListIsEmpty)
-
+    
+        if (!tasks.length) return
         // отобразить/скрыть панель пагинации
-        if (tasks.length < countTasksOnPage) {
+        if (tasks.length <= countTasksOnPage) {
             if (visiblePaginationPanel) setVisiblePaginationPanel(false)
             if (page !== 1) {
                 updateAppSettingsServer({ page: 1 })
@@ -111,7 +112,6 @@ function App() {
                     .catch(error => console.log(error))
             }
         } else {
-            if (!tasks.length) return
             if (!visiblePaginationPanel) setVisiblePaginationPanel(true)
             if (page > getMaxCountPage(tasks, countTasksOnPage)) {
                 updateAppSettingsServer({ page: page - 1 })
@@ -138,7 +138,7 @@ function App() {
             </ul>
             <div className={`task-manager__pagination-panel ${visiblePaginationPanel ? '' : 'display-none'}`}>
                 <button className="task-manager__button task-manager__button_pagination_prev" onClick={handlePrevPage}>prev page</button>
-                <div className="task-manager__page">{page}</div>
+                <div className="task-manager__page">{formatPage(page, tasks.length, getMaxCountPage(tasks, countTasksOnPage))}</div>
                 <button className="task-manager__button task-manager__button_pagination_next" onClick={handleNextPage}>next page</button>
             </div>
         </div>
