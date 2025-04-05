@@ -16,6 +16,7 @@ function App() {
     const [inputValue, setInputValue] = useState("");
     const [dateLastTask, setDateLastTask] = useState(MESSAGES.taskListIsEmpty);
     const [visiblePaginationPanel, setVisiblePaginationPanel] = useState(false);
+    const [sliceTasks, setSliceTasks] = useState([]);
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
@@ -50,9 +51,14 @@ function App() {
         }).catch((error) => console.log(error))
     }
 
-    const viewTasks = sortByID(tasks).map(task =>
+    const viewTasks = sortByID(sliceTasks.length ? sliceTasks : tasks).map(task =>
         <Task key={task.id} {...task}/>
     );
+
+    function createSliceTasks() {
+        const currentSlice = (page - 1) * countTasksOnPage
+        setSliceTasks(sortByID(tasks).slice(currentSlice, currentSlice + countTasksOnPage))
+    }
 
     useEffect(() => {
         getAppSettingsServer().then(appSettings => {
@@ -73,14 +79,18 @@ function App() {
         // отобразить дату последней таски
         if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
         else setDateLastTask(MESSAGES.taskListIsEmpty)
-        // отобразить панель пагинации
+        // отобразить/скрыть панель пагинации
         if (tasks.length < countTasksOnPage) {
             setVisiblePaginationPanel(false)
+            setSliceTasks([])
             updateAppSettingsServer({page: 1}).then(response => {
                 if (response) dispatch(setPageStore(response.page))
             }).catch(error => console.log(error))
-        } else setVisiblePaginationPanel(true)
-      }, [tasks])
+        } else {
+            setVisiblePaginationPanel(true)
+            createSliceTasks()
+        }
+      }, [tasks, countTasksOnPage])
 
   return (
     <div className={`body body_theme_${theme}`}>
