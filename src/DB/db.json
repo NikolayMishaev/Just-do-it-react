@@ -1,69 +1,12 @@
 {
   "settings": [
     {
-      "theme": "black",
+      "theme": "grey",
       "page": 0,
       "countTasksOnPage": 10,
-      "appID": 65,
+      "appID": 72,
       "id": "123"
     }
   ],
-  "tasks": [
-    {
-      "id": "57",
-      "text": "2",
-      "date": "4/4/2025, 21:36:7 PM",
-      "dateInSeconds": 1743791767207,
-      "isComplete": true
-    },
-    {
-      "id": "58",
-      "text": "2",
-      "date": "4/4/2025, 21:36:7 PM",
-      "dateInSeconds": 1743791767494,
-      "isComplete": false
-    },
-    {
-      "id": "59",
-      "text": "2",
-      "date": "4/4/2025, 21:36:7 PM",
-      "dateInSeconds": 1743791767647,
-      "isComplete": true
-    },
-    {
-      "id": "60",
-      "text": "2",
-      "date": "4/4/2025, 21:36:7 PM",
-      "dateInSeconds": 1743791767871,
-      "isComplete": false
-    },
-    {
-      "id": "61",
-      "text": "d",
-      "date": "5/4/2025, 10:2:38 AM",
-      "dateInSeconds": 1743836558152,
-      "isComplete": false
-    },
-    {
-      "id": "62",
-      "text": "1",
-      "date": "5/4/2025, 10:4:40 AM",
-      "dateInSeconds": 1743836680088,
-      "isComplete": false
-    },
-    {
-      "id": "63",
-      "text": "3",
-      "date": "5/4/2025, 10:4:44 AM",
-      "dateInSeconds": 1743836684136,
-      "isComplete": false
-    },
-    {
-      "id": "64",
-      "text": "df",
-      "date": "5/4/2025, 10:10:7 AM",
-      "dateInSeconds": 1743837007208,
-      "isComplete": false
-    }
-  ]
+  "tasks": []
 }

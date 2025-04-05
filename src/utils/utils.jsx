@@ -14,3 +14,10 @@ export function getDate (date) {
 export function sortByID (array) {
     return array.toSorted((a, b) => Number(b.id) - Number(a.id))
 }
+
+export function getLastDate (array) {
+    const sortedArrayByID = sortByID(array)
+    const lastAddedElement = sortedArrayByID[0]
+    const dateLastAddedElement = lastAddedElement.date
+    return dateLastAddedElement
+}

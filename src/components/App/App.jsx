@@ -5,14 +5,16 @@ import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTaskStore } from '../../store/tasksSlice'
 import { setPageStore, setCountPageStore, incrementIdStore, setIdStore, changeThemeStore } from '../../store/appSettingsSlice'
-import { getDate ,sortByID } from '../../utils/utils'
+import { getDate ,sortByID, getLastDate } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
 import { getAppSettingsServer, updateAppSettingsServer } from '../../utils/AppSettingsAPI'
 
 function App() {
+
     const [inputValue, setInputValue] = useState("");
+    const [dateLastTask, setDateLastTask] = useState(MESSAGES.taskListIsEmpty);
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
@@ -64,7 +66,10 @@ function App() {
         }).catch(error => console.log(error))
       }, []);
 
-
+      useEffect(() => {
+        if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
+        else setDateLastTask(MESSAGES.taskListIsEmpty)
+      }, [tasks])
 
   return (
     <div className={`body body_theme_${theme}`}>
@@ -75,7 +80,7 @@ function App() {
                 <input className="task-manager__input" placeholder="Add a task." value={inputValue} onChange={handleInputTask}></input>
                 <button className="task-manager__button task-manager__button_task_add" onClick={handleAddTask}>I Got This!</button>
             </div>
-            <p className="task-manager__date">{MESSAGES.emptyContainerTasks}</p>
+            <p className="task-manager__date">{dateLastTask}</p>
             <ul className="task-manager__container-tasks">
                 {viewTasks}
             </ul>

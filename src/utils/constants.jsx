@@ -1,5 +1,5 @@
 export const MESSAGES = {
-    emptyContainerTasks: `You don't have a single task.`
+    taskListIsEmpty: `You don't have a single task.`
 }
 
 export const API = {
