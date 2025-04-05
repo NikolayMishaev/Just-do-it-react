@@ -10,3 +10,7 @@ export function getDate (date) {
     const formatedDate = `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
     return {currentDate: formatedDate, dateInSeconds }
 }
+
+export function sortByID (array) {
+    return array.toSorted((a, b) => Number(b.id) - Number(a.id))
+}

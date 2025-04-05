@@ -5,7 +5,7 @@ import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTaskStore } from '../../store/tasksSlice'
 import { setPageStore, setCountPageStore, incrementIdStore, setIdStore, changeThemeStore } from '../../store/appSettingsSlice'
-import { getDate } from '../../utils/utils'
+import { getDate ,sortByID } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
 import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
@@ -45,7 +45,7 @@ function App() {
         }).catch((error) => console.log(error))
     }
 
-    const viewTasks = tasks.map(task =>
+    const viewTasks = sortByID(tasks).map(task =>
         <Task key={task.id} {...task}/>
     );
 
