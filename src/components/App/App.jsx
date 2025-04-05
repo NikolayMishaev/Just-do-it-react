@@ -3,12 +3,12 @@ import '../ThemePanel/ThemePanel'
 import ThemePanel from '../ThemePanel/ThemePanel'
 import Task from '../Task/Task'
 import { useSelector, useDispatch } from 'react-redux'
-import { addTaskStore } from '../../store/tasksSlice'
+import { addTaskStore, updateTaskStore } from '../../store/tasksSlice'
 import { setPageStore, setIdStore, changeThemeStore, setCountPageStore } from '../../store/appSettingsSlice'
 import { getDate ,sortByID, getLastDate, getMaxCountPage, formatPage } from '../../utils/utils'
 import { MESSAGES } from '../../utils/constants'
 import { useState, useEffect } from 'react'
-import { getTasksServer, addTaskServer } from '../../utils/TasksAPI'
+import { getTasksServer, addTaskServer, updateTaskServer } from '../../utils/TasksAPI'
 import { getAppSettingsServer, updateAppSettingsServer } from '../../utils/AppSettingsAPI'
 
 function App() {
@@ -16,12 +16,17 @@ function App() {
     const [inputValue, setInputValue] = useState("");
     const [dateLastTask, setDateLastTask] = useState(MESSAGES.taskListIsEmpty);
     const [visiblePaginationPanel, setVisiblePaginationPanel] = useState(false);
+    const [needUpdateTask, setNeedUpdateTask] = useState(false);
     const dispatch = useDispatch()
     const theme = useSelector(state => state.appSettings.theme)
     const id = useSelector(state => state.appSettings.id)
     const tasks = useSelector(state => state.tasks.tasks)
     const page = useSelector(state => state.appSettings.page)
     const countTasksOnPage = useSelector(state => state.appSettings.countTasksOnPage)
+
+    const viewTasks = createSliceTasks(tasks).map(task =>
+        <Task key={task.id} {...task}/>
+    );
 
     function handleInputTask (e) {
         setInputValue(e.target.value)
@@ -44,6 +49,9 @@ function App() {
                 .then((task) => {
                     if (task) {
                         dispatch(addTaskStore(task))
+                        if ((tasks.length + 1) % countTasksOnPage === 0) {
+                            setNeedUpdateTask(true)
+                        }
                     }
                 })
             }
@@ -68,16 +76,27 @@ function App() {
         }).catch((error) => console.log(error))
     }
 
-    const viewTasks = createSliceTasks(tasks).map(task =>
-        <Task key={task.id} {...task}/>
-    );
-
     function createSliceTasks(tasks) {
         if (tasks.length <= countTasksOnPage) return sortByID(tasks)
         else {
             const currentSlice = (page - 1) * countTasksOnPage
             return sortByID(tasks).slice(currentSlice, currentSlice + countTasksOnPage)
         }
+    }
+
+    function updateDateTasks () {
+            let sortedTasks = sortByID(tasks)
+            for (let i = 0; i < countTasksOnPage; i++) {
+                let task = sortedTasks[i]
+                let updateDateInSeconds = new Date(task.dateInSeconds)
+                updateDateInSeconds.setDate(updateDateInSeconds.getDate() - 1)
+                const {currentDate, dateInSeconds} = getDate(updateDateInSeconds)
+                updateTaskServer(task.id, {date: currentDate, dateInSeconds}).then(response => {
+                    if (response) {
+                        dispatch(updateTaskStore(response))
+                    }
+                })
+            }
     }
 
     useEffect(() => {
@@ -99,7 +118,7 @@ function App() {
         // отобразить дату последней таски
         if (tasks.length > 0) setDateLastTask(getLastDate(tasks))
         else setDateLastTask(MESSAGES.taskListIsEmpty)
-    
+
         if (!tasks.length) return
         // отобразить/скрыть панель пагинации
         if (tasks.length <= countTasksOnPage) {
@@ -120,6 +139,10 @@ function App() {
                 })
                 .catch(error => console.log(error))
             }
+        }
+        if (tasks.length % countTasksOnPage === 0 && needUpdateTask) {
+            updateDateTasks()
+            setNeedUpdateTask(false)
         }
     }, [tasks])
 

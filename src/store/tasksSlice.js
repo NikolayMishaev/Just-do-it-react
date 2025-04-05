@@ -13,9 +13,8 @@ export const tasksSlice = createSlice({
       state.tasks = state.tasks.filter(task => task.id !== action.payload)
     },
     updateTaskStore: (state, action) => { 
-      const {id, isComplete} = action.payload
       state.tasks = state.tasks.map(task => {
-        if (task.id === id) return {...task, isComplete}
+        if (task.id === action.payload.id) return {...task, ...action.payload}
         else return task
       })
     }
