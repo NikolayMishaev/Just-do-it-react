@@ -51,13 +51,16 @@ function App() {
         }).catch((error) => console.log(error))
     }
 
-    const viewTasks = sortByID(sliceTasks.length ? sliceTasks : tasks).map(task =>
+    const viewTasks = createSliceTasks(tasks).map(task =>
         <Task key={task.id} {...task}/>
     );
 
-    function createSliceTasks() {
-        const currentSlice = (page - 1) * countTasksOnPage
-        setSliceTasks(sortByID(tasks).slice(currentSlice, currentSlice + countTasksOnPage))
+    function createSliceTasks(tasks) {
+        if (tasks.length < 10) return sortByID(tasks)
+        else {
+            const currentSlice = (page - 1) * countTasksOnPage
+            return sortByID(tasks).slice(currentSlice, currentSlice + countTasksOnPage)
+        }
     }
 
     useEffect(() => {
@@ -82,13 +85,13 @@ function App() {
         // отобразить/скрыть панель пагинации
         if (tasks.length < countTasksOnPage) {
             setVisiblePaginationPanel(false)
-            setSliceTasks([])
+            // setSliceTasks([])
             updateAppSettingsServer({page: 1}).then(response => {
                 if (response) dispatch(setPageStore(response.page))
             }).catch(error => console.log(error))
         } else {
             setVisiblePaginationPanel(true)
-            createSliceTasks()
+            // createSliceTasks()
         }
       }, [tasks, countTasksOnPage])
 
