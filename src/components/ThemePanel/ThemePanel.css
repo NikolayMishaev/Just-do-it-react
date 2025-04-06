@@ -1,0 +1,15 @@
+.theme-panel {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+}
+
+.theme-panel :nth-child(n) {
+    margin-right: 10px;
+    border: 1px solid;
+    border-color: rgb(67, 94, 105);
+}
+
+.theme-panel :last-child {
+    margin-right: 0;
+}
