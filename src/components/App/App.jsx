@@ -42,20 +42,13 @@ function App() {
             isComplete: false,
             id: String(id),
         };
-        updateAppSettingsServer({ appID: id + 1 }).then(response => {
-            if (response) {
-                dispatch(setIdStore(response.appID))
-                addTaskServer(newTask)
-                .then((task) => {
-                    if (task) {
-                        dispatch(addTaskStore(task))
+        dispatch(addTaskStore(newTask))
                         if ((tasks.length + 1) % countTasksOnPage === 0) {
                             setNeedUpdateTask(true)
                         }
-                    }
-                })
-            }
-        }).catch((error) => console.log(error))
+                    
+                
+
     }
 
     function handlePrevPage () {
@@ -100,18 +93,21 @@ function App() {
     }
 
     useEffect(() => {
-        getAppSettingsServer().then(appSettings => {
-            if (appSettings) {
-                const { theme, page, countTasksOnPage, appID } = appSettings[0]
+                const { theme, page, countTasksOnPage, appID } = 
+    {
+      "theme": "black",
+      "page": 1,
+      "countTasksOnPage": 10,
+      "appID": 240,
+      "id": "123"
+    }
+  
                 dispatch(changeThemeStore(theme))
                 dispatch(setIdStore(appID))
                 dispatch(setPageStore(page))
                 dispatch(setCountPageStore(countTasksOnPage))
-            }
-        }).catch(error => console.log(error))
-        getTasksServer().then(tasks => {
-            if (Array.isArray(tasks)) tasks.map(task => dispatch(addTaskStore(task)))
-        }).catch(error => console.log(error))
+            
+
     }, []);
 
     useEffect(() => {

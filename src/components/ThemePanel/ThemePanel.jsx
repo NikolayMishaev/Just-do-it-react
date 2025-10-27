@@ -8,9 +8,7 @@ function ThemePanel() {
     const dispatch = useDispatch()
 
     function handleChangeTheme (theme) {
-        updateAppSettingsServer({theme}).then(response => {
-            if (response) dispatch(changeThemeStore(response.theme))
-        })
+        dispatch(changeThemeStore(theme))
     }
     
     return (
